@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Quotes</title>
+</head>
+<body>
+	<h1>Welcome, {{user.name}}!</h1>
+	<a href="/logout">Logout</a>
+
+	
+	<p>Quotable Quotes:</p>
+		<div style="height:400px;">
+		{% for quote in quotable_quotes %}
+			<div style="border: 1px black solid; width: 350px">
+				<p>{{quote.author}}:{{quote.content}}</p>
+				<p>posted by:<a href="/users/{{quote.poster.id}}">{{quote.poster.name}}</a></p>
+				<a href="/add_favorite/{{quote.id}}">Add to My List</a>
+			</div>
+		{% endfor %}
+	</div>
+	<p>Your Favorites:</p>
+	<div style="height:400px;">
+	  {% for favorite in favorites %}
+	  		<div class="one_quote" style="border: 1px black solid; width: 350px">
+			    <p>{{favorite.author}}:{{favorite.content}}</p>
+			   	<p>posted by:<a href="/users/{{favorite.poster.id}}">{{favorite.poster.name}}</a></p>
+			    <a href="/remove_favorite/{{favorite.id}}">Remove from My List</a>
+			</div>
+	  {% endfor %}
+	 </div>
+
+	{% if messages %}
+		{% for message in messages%}
+			{% if 'add_item' in message.tags %}
+				<p>{{message}}</p>
+			{% endif %}
+		{%endfor%}
+	{% endif %}
+
+	Contribute a Quote:
+	 <form action="/create" method="post">
+	{% csrf_token %}
+		<p>Quoted By:</p>
+		<input type="text" name="author">
+		<p>Message:</p>
+		<textarea name="content"></textarea>
+		<input type="submit" value="Submit">
+	</form>
+</body>
+</html>
